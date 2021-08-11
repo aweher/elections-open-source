@@ -35,11 +35,11 @@ public class WebServiceAuthentication {
 
 			if(wsAuthMethod.equals(Constants.WS_AUTH_TYPE_APP)) {
 				// Using Elections app native authentication method:
-				// - Header 'AuthToken' must match 'WS_AUTH_TOKEN' system parameter and
+				// - Header 'Authorization' must match 'WS_AUTH_TOKEN' system parameter and
 				// - Client IP must be among authorized IPs (system parameter)
 
 				// Validate token
-				String clientAuthToken = request.getHeader("AuthToken");
+				String clientAuthToken = request.getHeader("Authorization");
 				String appAuthToken = AppContext.getInstance().getMonitorBeanRemote().getWsAuthToken();
 				if (clientAuthToken == null || !clientAuthToken.equals(appAuthToken)) {
 					appLogger.warn("Authentication failed for WS call from IP " + clientIp + ", missing or invalid Auth Token");
