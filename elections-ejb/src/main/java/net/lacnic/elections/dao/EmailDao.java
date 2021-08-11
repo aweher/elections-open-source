@@ -75,7 +75,7 @@ public class EmailDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Object[]> getEmailsHistoryAllIdAndDescription() {
-		Query q = em.createQuery("SELECT eh.emailId, eh.subject FROM EmailHistory eh ORDER BY eh.emailId");
+		Query q = em.createQuery("SELECT eh.emailHistoryId, eh.subject FROM EmailHistory eh ORDER BY eh.emailHistoryId");
 		return q.getResultList();
 	}
 

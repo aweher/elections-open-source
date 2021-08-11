@@ -22,7 +22,7 @@ public class WebServiceAuthentication {
 
 
 	/**
-	 * Authenticates the client accoding to the configured authentication method
+	 * Authenticates the client according to the configured authentication method
 	 * 
 	 * @param request
 	 * @return null if authentication OK, error Response if there's a problem
@@ -31,6 +31,7 @@ public class WebServiceAuthentication {
 		try {
 			String wsAuthMethod = AppContext.getInstance().getMonitorBeanRemote().getWsAuthMethod();
 			String clientIp = getRemoteAddr(request);
+			String clientAuthToken = request.getHeader("Authorization");
 			appLogger.info("Authenticating WS call from IP " + clientIp + ", authMethod=" + wsAuthMethod);
 
 			if(wsAuthMethod.equals(Constants.WS_AUTH_TYPE_APP)) {
@@ -39,7 +40,6 @@ public class WebServiceAuthentication {
 				// - Client IP must be among authorized IPs (system parameter)
 
 				// Validate token
-				String clientAuthToken = request.getHeader("Authorization");
 				String appAuthToken = AppContext.getInstance().getMonitorBeanRemote().getWsAuthToken();
 				if (clientAuthToken == null || !clientAuthToken.equals(appAuthToken)) {
 					appLogger.warn("Authentication failed for WS call from IP " + clientIp + ", missing or invalid Auth Token");
@@ -66,7 +66,7 @@ public class WebServiceAuthentication {
 				// Set URL, media type, authtoken header and call GET service method
 				LacnicAuthResponse response = client.target(AppContext.getInstance().getMonitorBeanRemote().getWsLacnicAuthUrl())
 						.request()
-						.header("Authorization", request.getHeader("Authorization"))
+						.header("Authorization", clientAuthToken)
 						.get(LacnicAuthResponse.class);
 
 				// Check response
