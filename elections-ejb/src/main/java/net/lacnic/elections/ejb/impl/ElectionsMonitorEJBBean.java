@@ -23,6 +23,8 @@ import net.lacnic.elections.domain.Candidate;
 import net.lacnic.elections.domain.Commissioner;
 import net.lacnic.elections.domain.Election;
 import net.lacnic.elections.domain.ElectionLight;
+import net.lacnic.elections.domain.Email;
+import net.lacnic.elections.domain.EmailHistory;
 import net.lacnic.elections.domain.IpAccess;
 import net.lacnic.elections.domain.UserVoter;
 import net.lacnic.elections.domain.services.ActivityReportTable;
@@ -30,6 +32,7 @@ import net.lacnic.elections.domain.services.AuditorReportTable;
 import net.lacnic.elections.domain.services.CandidateReportTable;
 import net.lacnic.elections.domain.services.CommissionerReportTable;
 import net.lacnic.elections.domain.services.ElectionReportTable;
+import net.lacnic.elections.domain.services.EmailReportTable;
 import net.lacnic.elections.ejb.ElectionsMonitorEJB;
 import net.lacnic.elections.ejb.commons.impl.AutomaticProcesses;
 import net.lacnic.elections.utils.Constants;
@@ -404,10 +407,10 @@ public class ElectionsMonitorEJBBean implements ElectionsMonitorEJB {
 	public List<TablesReportData> getElectionsBasicData() {
 		try {
 			List<TablesReportData> electionsData = new ArrayList<>();
-			List<Object[]> electionDataList = ElectionsDaoFactory.createElectionDao(em).getElectionsAllIdAndTitle();
+			List<Object[]> electionsDataList = ElectionsDaoFactory.createElectionDao(em).getElectionsAllIdAndTitle();
 
-			for(int i = 0; i < electionDataList.size(); i++) {
-				electionsData.add(new TablesReportData((long)electionDataList.get(i)[0], electionDataList.get(i)[1].toString()));
+			for(int i = 0; i < electionsDataList.size(); i++) {
+				electionsData.add(new TablesReportData((long)electionsDataList.get(i)[0], electionsDataList.get(i)[1].toString()));
 			}
 
 			return electionsData;
@@ -438,7 +441,91 @@ public class ElectionsMonitorEJBBean implements ElectionsMonitorEJB {
 		return null;
 	}
 
+	/**
+	 * Returns a list with id and description for all Emails in the system
+	 * 
+	 * @return List of Emails id and description
+	 */
+	@Override
+	public List<TablesReportData> getEmailsBasicData() {
+		try {
+			List<TablesReportData> emailsData = new ArrayList<>();
+			List<Object[]> emailsDataList = ElectionsDaoFactory.createEmailDao(em).getEmailsAllIdAndDescription();
 
+			for(int i = 0; i < emailsDataList.size(); i++) {
+				emailsData.add(new TablesReportData((long)emailsDataList.get(i)[0], emailsDataList.get(i)[1].toString()));
+			}
+
+			return emailsData;
+		} catch (Exception e) {
+			appLogger.error(e);
+		}
+		return null;
+	}
+
+	/**
+	 * Returns information about the Email with the given id
+	 * 
+	 * @param emailId
+	 * 			Identifier of the Email
+	 * 
+	 * @return An EmailReportTable instance containing the information
+	 */
+	@Override
+	public EmailReportTable getEmailTableReport(Long emailId) {
+		try {
+			Email email = ElectionsDaoFactory.createEmailDao(em).getEmail(emailId);
+			if(email != null) {
+				return new EmailReportTable(email);
+			}
+		} catch (Exception e) {
+			appLogger.error(e);
+		}
+		return null;
+	}
+
+	/**
+	 * Returns a list with id and description for all EmailsHistory in the system
+	 * 
+	 * @return List of EmailsHistory id and description
+	 */
+	@Override
+	public List<TablesReportData> getEmailsHistoryBasicData() {
+		try {
+			List<TablesReportData> emailsHistoryData = new ArrayList<>();
+			List<Object[]> emailsHistoryDataList = ElectionsDaoFactory.createEmailDao(em).getEmailsHistoryAllIdAndDescription();
+
+			for(int i = 0; i < emailsHistoryDataList.size(); i++) {
+				emailsHistoryData.add(new TablesReportData((long)emailsHistoryDataList.get(i)[0], emailsHistoryDataList.get(i)[1].toString()));
+			}
+
+			return emailsHistoryData;
+		} catch (Exception e) {
+			appLogger.error(e);
+		}
+		return null;
+	}
+
+	/**
+	 * Returns information about the EmailHistory with the given id
+	 * 
+	 * @param emailHistoryId
+	 * 			Identifier of the EmailHistory
+	 * 
+	 * @return An EmailReportTable instance containing the information
+	 */
+	@Override
+	public EmailReportTable getEmailHistoryTableReport(Long emailHistoryId) {
+		try {
+			EmailHistory emailHistory = ElectionsDaoFactory.createEmailDao(em).getEmailHistory(emailHistoryId);
+			if(emailHistory != null) {
+				return new EmailReportTable(emailHistory);
+			}
+		} catch (Exception e) {
+			appLogger.error(e);
+		}
+		return null;
+	}
 
 	/**
 	 * Returns a list with id and description for all IpAccesses in the system

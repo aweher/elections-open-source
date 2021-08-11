@@ -16,7 +16,6 @@ public class EmailReportTable implements Serializable {
 	private String cc;
 	private String bcc;
 	private String subject;
-	private String body;
 	private Boolean sent = false;
 	private String createdDate;
 	private String templateType;
@@ -32,7 +31,6 @@ public class EmailReportTable implements Serializable {
 		this.cc = email.getCc();
 		this.bcc = email.getBcc();
 		this.subject = email.getSubject();
-		this.body = email.getBody();
 		this.sent = email.getSent();
 		this.createdDate = email.getCreatedDateString();
 		this.templateType = email.getTemplateType();
@@ -46,7 +44,6 @@ public class EmailReportTable implements Serializable {
 		this.cc = email.getCc();
 		this.bcc = email.getBcc();
 		this.subject = email.getSubject();
-		this.body = email.getBody();
 		this.sent = email.getSent();
 		this.createdDate = email.getCreatedDateString();
 		this.templateType = email.getTemplateType();
@@ -100,14 +97,6 @@ public class EmailReportTable implements Serializable {
 
 	public void setSubject(String subject) {
 		this.subject = subject;
-	}
-
-	public String getBody() {
-		return body;
-	}
-
-	public void setBody(String body) {
-		this.body = body;
 	}
 
 	public Boolean getSent() {

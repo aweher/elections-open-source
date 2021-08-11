@@ -21,6 +21,7 @@ import net.lacnic.elections.domain.services.AuditorReportTable;
 import net.lacnic.elections.domain.services.CandidateReportTable;
 import net.lacnic.elections.domain.services.CommissionerReportTable;
 import net.lacnic.elections.domain.services.ElectionReportTable;
+import net.lacnic.elections.domain.services.EmailReportTable;
 import net.lacnic.elections.ws.app.AppContext;
 import net.lacnic.elections.ws.auth.WebServiceAuthentication;
 
@@ -38,7 +39,7 @@ public class ElectionsTablesServices implements Serializable {
 	@Path("/activities")
 	@Produces("application/json; charset=UTF-8")
 	public Response getActivities(@Context final HttpServletRequest request) {
-		try {			
+		try {
 			// Authenticate
 			Response authResponse = WebServiceAuthentication.authenticate(request);
 
@@ -60,7 +61,7 @@ public class ElectionsTablesServices implements Serializable {
 	@Path("/activity/{id}")
 	@Produces("application/json; charset=UTF-8")
 	public Response getActivity(@Context final HttpServletRequest request, @PathParam("id") Long id) {
-		try {			
+		try {
 			// Authenticate
 			Response authResponse = WebServiceAuthentication.authenticate(request);
 
@@ -252,7 +253,7 @@ public class ElectionsTablesServices implements Serializable {
 	@Path("/election/{id}")
 	@Produces("application/json; charset=UTF-8")
 	public Response getElection(@Context final HttpServletRequest request, @PathParam("id") Long id) {
-		try {			
+		try {
 			// Authenticate
 			Response authResponse = WebServiceAuthentication.authenticate(request);
 
@@ -265,6 +266,102 @@ public class ElectionsTablesServices implements Serializable {
 			ElectionReportTable electionReport = AppContext.getInstance().getMonitorBeanRemote().getElectionTableReport(id);
 			if(electionReport != null) {
 				return Response.ok(electionReport).build();
+			} else {
+				return Response.status(Response.Status.NOT_FOUND).build();
+			}
+		} catch (Exception e) {
+			appLogger.error(e);
+			return Response.serverError().build();
+		}
+	}
+
+	@GET
+	@Path("/emails")
+	@Produces("application/json; charset=UTF-8")
+	public Response getEmails(@Context final HttpServletRequest request) {
+		try {
+			// Authenticate
+			Response authResponse = WebServiceAuthentication.authenticate(request);
+
+			// If auth response not null then authentication failed, return auth response
+			if (authResponse != null) {
+				return authResponse;
+			}
+
+			// Auth OK, return requested data
+			List<TablesReportData> listTablesReportData = AppContext.getInstance().getMonitorBeanRemote().getEmailsBasicData();
+			return Response.ok(listTablesReportData).build();
+		} catch (Exception e) {
+			appLogger.error(e);
+			return Response.serverError().build();
+		}
+	}
+
+	@GET
+	@Path("/email/{id}")
+	@Produces("application/json; charset=UTF-8")
+	public Response getEmail(@Context final HttpServletRequest request, @PathParam("id") Long id) {
+		try {
+			// Authenticate
+			Response authResponse = WebServiceAuthentication.authenticate(request);
+
+			// If auth response not null then authentication failed, return auth response
+			if (authResponse != null) {
+				return authResponse;
+			}
+
+			// Auth OK, return requested data
+			EmailReportTable emailReport = AppContext.getInstance().getMonitorBeanRemote().getEmailTableReport(id);
+			if(emailReport != null) {
+				return Response.ok(emailReport).build();
+			} else {
+				return Response.status(Response.Status.NOT_FOUND).build();
+			}
+		} catch (Exception e) {
+			appLogger.error(e);
+			return Response.serverError().build();
+		}
+	}
+
+	@GET
+	@Path("/emailshistory")
+	@Produces("application/json; charset=UTF-8")
+	public Response getEmailsHistory(@Context final HttpServletRequest request) {
+		try {
+			// Authenticate
+			Response authResponse = WebServiceAuthentication.authenticate(request);
+
+			// If auth response not null then authentication failed, return auth response
+			if (authResponse != null) {
+				return authResponse;
+			}
+
+			// Auth OK, return requested data
+			List<TablesReportData> listTablesReportData = AppContext.getInstance().getMonitorBeanRemote().getEmailsHistoryBasicData();
+			return Response.ok(listTablesReportData).build();
+		} catch (Exception e) {
+			appLogger.error(e);
+			return Response.serverError().build();
+		}
+	}
+
+	@GET
+	@Path("/emailhistory/{id}")
+	@Produces("application/json; charset=UTF-8")
+	public Response getEmailHistory(@Context final HttpServletRequest request, @PathParam("id") Long id) {
+		try {
+			// Authenticate
+			Response authResponse = WebServiceAuthentication.authenticate(request);
+
+			// If auth response not null then authentication failed, return auth response
+			if (authResponse != null) {
+				return authResponse;
+			}
+
+			// Auth OK, return requested data
+			EmailReportTable emailHistoryReport = AppContext.getInstance().getMonitorBeanRemote().getEmailHistoryTableReport(id);
+			if(emailHistoryReport != null) {
+				return Response.ok(emailHistoryReport).build();
 			} else {
 				return Response.status(Response.Status.NOT_FOUND).build();
 			}

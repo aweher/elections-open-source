@@ -12,6 +12,7 @@ import net.lacnic.elections.domain.services.AuditorReportTable;
 import net.lacnic.elections.domain.services.CandidateReportTable;
 import net.lacnic.elections.domain.services.CommissionerReportTable;
 import net.lacnic.elections.domain.services.ElectionReportTable;
+import net.lacnic.elections.domain.services.EmailReportTable;
 import net.ripe.ipresource.IpResourceSet;
 
 
@@ -52,6 +53,14 @@ public interface ElectionsMonitorEJB {
 	public List<TablesReportData> getElectionsBasicData();
 
 	public ElectionReportTable getElectionTableReport(Long electionId);
+
+	public List<TablesReportData> getEmailsBasicData();
+
+	public EmailReportTable getEmailTableReport(Long emailId);
+
+	public List<TablesReportData> getEmailsHistoryBasicData();
+
+	public EmailReportTable getEmailHistoryTableReport(Long emailHistoryId);
 
 	public List<TablesReportData> getIpAccessesBasicData();
 
